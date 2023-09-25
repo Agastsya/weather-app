@@ -1,24 +1,27 @@
 //Imports
-const axios= require("axios")
+const axios = require("axios")
 const path = require("path")
-const express = require("express")
+const express = require("express");
 const app = express();
 const cors = require("cors")
+
+
 require("dotenv").config()
 
+const server = 'https://air-quality.p.rapidapi.com'
 //Middlewares
-app.use(express.static(path.join(path.resolve(__dirname,"public"))))
+app.use(express.static(path.join(__dirname, "public")));
 app.use(cors())
 
-//Functions
+
 const fetchApi = async (req,res)=>{
 
     const options = {
         method: 'GET',
-        url: 'https://air-quality.p.rapidapi.com/current/airquality',
+        url: `${server}/current/airquality`,
         params: {
-            lon: '-78.638',
-            lat: '35.779'
+            lon: '-73.00597',
+            lat: '40.71427'
         },
         headers: {
             'X-RapidAPI-Key': process.env.RAPID_API_WEATHER_KEY,
@@ -28,24 +31,22 @@ const fetchApi = async (req,res)=>{
 
     try {
         const response = await axios.request(options);
-        res.send(response.data);
+        res.json(response.data);
     } catch (error) {
-        console.error(error);
+        console.error(error.message);
     }
 }
 
 
 //ROUTES
-
 app.get("/",(req,res)=>{
-    res.send("Home Page")
+    fetchApi()
 })
 
-app.get("/api",fetchApi)
-
-app.get("/main",(req,res)=>{
-    res.sendFile("main.html")
+app.get("/api",(req,res)=>{
+    res.sendFile(`${__dirname}/public/main.html`)
 })
+
 
 
 app.listen(3000,()=>{
