@@ -1,7 +1,10 @@
 let button = document.getElementById("button-location");
 let latText = document.getElementById("latitude");
 let longText = document.getElementById("longitude");
-
+module.exports={
+    lat:null,
+    long:null
+}
 button.addEventListener("click", () => {
     navigator.geolocation.getCurrentPosition((position) => {
         let lat = position.coords.latitude;
@@ -11,4 +14,6 @@ button.addEventListener("click", () => {
         longText.innerText = `Longitude : ${long.toFixed(2)}`;
     });
 });
+
+
 
